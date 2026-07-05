@@ -1,0 +1,379 @@
+openapi: 3.1.0
+info:
+  title: FluentDev API
+  version: 1.0.0
+  description: >
+    Versioned REST API for the FluentDev PWA (feature 001-fluentdev-pwa).
+    Auth is cookie-session based (HttpOnly; Secure; SameSite=Lax). All state-changing
+    requests require the X-CSRF-Token header (double-submit). Error responses use
+    application/problem+json (RFC 9457).
+servers:
+  - url: /api/v1
+
+security:
+  - cookieSession: []
+
+paths:
+  # ── Auth (US1 / FR-001, FR-002) ──────────────────────────────────────────
+  /auth/register:
+    post:
+      security: []
+      summary: Register with e-mail and password; starts a session and a placement test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, displayName]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 10, maxLength: 128 }
+                displayName: { type: string, minLength: 1, maxLength: 60 }
+      responses:
+        "201": { $ref: "#/components/responses/Me" }
+        "409": { $ref: "#/components/responses/Problem" }
+        "429": { $ref: "#/components/responses/Problem" }
+  /auth/login:
+    post:
+      security: []
+      summary: E-mail/password login (rate limited; generic errors — OWASP A07)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200": { $ref: "#/components/responses/Me" }
+        "401": { $ref: "#/components/responses/Problem" }
+        "429": { $ref: "#/components/responses/Problem" }
+  /auth/oauth/{provider}/start:
+    get:
+      security: []
+      summary: Begin OAuth authorization-code flow (state + PKCE)
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string, enum: [github, google] }
+      responses:
+        "302": { description: Redirect to provider consent screen }
+  /auth/oauth/{provider}/callback:
+    get:
+      security: []
+      summary: OAuth callback; creates/links account, starts session
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema: { type: string, enum: [github, google] }
+        - { name: code, in: query, required: true, schema: { type: string } }
+        - { name: state, in: query, required: true, schema: { type: string } }
+      responses:
+        "302": { description: Redirect into the app (placement or dashboard) }
+        "400": { $ref: "#/components/responses/Problem" }
+  /auth/logout:
+    post:
+      summary: Invalidate the current session
+      responses:
+        "204": { description: Session revoked }
+  /me:
+    get:
+      summary: Current user profile, level, streaks
+      responses:
+        "200": { $ref: "#/components/responses/Me" }
+        "401": { $ref: "#/components/responses/Problem" }
+
+  # ── Placement (US1 / FR-002..FR-006) ─────────────────────────────────────
+  /placement/session:
+    get:
+      summary: Fetch the active placement session (resume support) or 404
+      responses:
+        "200": { $ref: "#/components/responses/PlacementState" }
+        "404": { $ref: "#/components/responses/Problem" }
+    post:
+      summary: Start (or restart, abandoning the active) placement session
+      responses:
+        "201": { $ref: "#/components/responses/PlacementState" }
+  /placement/session/answers:
+    post:
+      summary: Submit an answer; server scores it and returns next question or result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [questionId, answer]
+              properties:
+                questionId: { type: string, format: uuid }
+                answer: { type: string, maxLength: 500 }
+      responses:
+        "200": { $ref: "#/components/responses/PlacementState" }
+        "409":
+          description: Question already answered or session not active
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+
+  # ── Content & lessons (US2 / FR-006..FR-012) ─────────────────────────────
+  /tracks:
+    get:
+      summary: Modules grouped by level with lock state for the current user
+      responses:
+        "200":
+          description: Track listing
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Module" }
+  /lessons/{lessonId}:
+    get:
+      summary: Lesson with its ordered exercises (no correct answers included)
+      parameters:
+        - { name: lessonId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: Lesson detail
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Lesson" }
+        "403":
+          description: Lesson's track is locked for this user (FR-006)
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+  /exercises/{exerciseId}/attempts:
+    post:
+      summary: >
+        Submit a written/listening answer. Server validates (typo tolerance for
+        writing per research R8), logs an immutable progress entry, updates streak
+        and review queue. Idempotent by attemptId (offline outbox replay).
+      parameters:
+        - { name: exerciseId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [attemptId, answer]
+              properties:
+                attemptId: { type: string, format: uuid, description: client-generated, dedupe key }
+                answer: { type: string, maxLength: 1000 }
+                completedAt: { type: string, format: date-time, description: offline completion time }
+                isReview: { type: boolean, default: false }
+      responses:
+        "201": { $ref: "#/components/responses/AttemptResult" }
+        "200": { description: Duplicate replay (already recorded) — same body as 201 }
+
+  # ── Speech (US3 / FR-013..FR-017) ────────────────────────────────────────
+  /exercises/{exerciseId}/speech-attempts:
+    post:
+      summary: >
+        Upload a spoken attempt (≤30 s, ≤1.5 MB, audio/webm or audio/mp4).
+        Server transcribes via primary provider with secondary failover (research R2),
+        scores similarity (1−WER), logs progress. Rate limited per user.
+      parameters:
+        - { name: exerciseId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [attemptId, audio]
+              properties:
+                attemptId: { type: string, format: uuid }
+                audio: { type: string, format: binary }
+      responses:
+        "201":
+          description: Scored speaking result
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SpeechResult" }
+        "413": { $ref: "#/components/responses/Problem" }
+        "422":
+          description: Audio unintelligible — retry prompted, not scored as failure
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+        "429": { $ref: "#/components/responses/Problem" }
+        "503":
+          description: All transcription providers unavailable — client offers retry
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+
+  # ── Dashboard & review (US4 / FR-018..FR-020) ────────────────────────────
+  /dashboard:
+    get:
+      summary: Streak, longest streak, XP, and 90-day heatmap buckets (user timezone)
+      responses:
+        "200":
+          description: Dashboard aggregate
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Dashboard" }
+  /review-queue:
+    get:
+      summary: Items due for spaced review (due_at <= now), oldest first
+      responses:
+        "200":
+          description: Due review items with their exercises
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ReviewItem" }
+
+components:
+  securitySchemes:
+    cookieSession:
+      type: apiKey
+      in: cookie
+      name: fluentdev_session
+  responses:
+    Me:
+      description: Current user
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/User" }
+    PlacementState:
+      description: Placement progress — either the next question or the final result
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/PlacementState" }
+    AttemptResult:
+      description: Scored attempt
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/AttemptResult" }
+    Problem:
+      description: Error (RFC 9457)
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+  schemas:
+    Problem:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+    User:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        displayName: { type: string }
+        proficiencyLevel: { type: [string, "null"], enum: [basic, intermediate, advanced, null] }
+        currentStreak: { type: integer }
+        longestStreak: { type: integer }
+    PlacementState:
+      type: object
+      required: [status, questionsServed]
+      properties:
+        status: { type: string, enum: [active, completed] }
+        questionsServed: { type: integer, maximum: 12 }
+        currentBand: { type: string, enum: [A1, A2, B1, B2, C1] }
+        nextQuestion:
+          type: [object, "null"]
+          description: Present while active; never includes the correct answer
+          properties:
+            id: { type: string, format: uuid }
+            questionType: { type: string, enum: [choice, listening_choice, order] }
+            prompt: { type: string }
+            options: { type: array, items: { type: string } }
+            audioAssetUrl: { type: [string, "null"] }
+        assignedLevel: { type: [string, "null"], enum: [basic, intermediate, advanced, null] }
+    Module:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        description: { type: string }
+        themeType: { type: string, enum: [travel, tech] }
+        difficultyLevel: { type: string, enum: [basic, intermediate, advanced] }
+        locked: { type: boolean, description: true when above the user's level (FR-006) }
+        lessons:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string, format: uuid }
+              title: { type: string }
+              xpReward: { type: integer }
+              completed: { type: boolean }
+    Lesson:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        pedagogicalFocus: { type: string }
+        xpReward: { type: integer }
+        exercises:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string, format: uuid }
+              exerciseType:
+                type: string
+                enum: [translate, fill_blank, listening_choice, listening_order, speaking]
+              promptContext: { type: string }
+              options: { type: [array, "null"], items: { type: string } }
+              audioAssetUrl: { type: [string, "null"] }
+              targetSentence:
+                type: [string, "null"]
+                description: Only for speaking exercises (sentence to read aloud)
+    AttemptResult:
+      type: object
+      properties:
+        correct: { type: boolean }
+        accuracyScore: { type: number, minimum: 0, maximum: 1 }
+        toleratedTypos: { type: array, items: { type: string } }
+        expectedAnswer: { type: [string, "null"], description: shown when incorrect (US2 scenario 3) }
+        lessonCompleted: { type: boolean }
+        xpAwarded: { type: integer }
+    SpeechResult:
+      type: object
+      properties:
+        similarity: { type: number, minimum: 0, maximum: 1 }
+        passed: { type: boolean, description: similarity >= 0.80 (FR-014) }
+        transcript: { type: string }
+        missedWords:
+          type: array
+          description: omitted/unintelligible target words to highlight (FR-015)
+          items: { type: string }
+        xpAwarded: { type: integer }
+    Dashboard:
+      type: object
+      properties:
+        currentStreak: { type: integer }
+        longestStreak: { type: integer }
+        totalXp: { type: integer }
+        heatmap:
+          type: array
+          maxItems: 90
+          items:
+            type: object
+            properties:
+              date: { type: string, format: date }
+              interactions: { type: integer }
+              level: { type: integer, minimum: 0, maximum: 4, description: saturation bucket }
+        dueReviews: { type: integer }
+    ReviewItem:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        exercise: { $ref: "#/components/schemas/Lesson/properties/exercises/items" }
+        dueAt: { type: string, format: date-time }
+        failureCount: { type: integer }

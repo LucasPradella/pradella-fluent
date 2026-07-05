@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fluentdev-postgres
+    environment:
+      POSTGRES_USER: fluentdev
+      POSTGRES_PASSWORD: fluentdev
+      POSTGRES_DB: fluentdev
+    ports:
+      # Override with POSTGRES_PORT when 5432 is taken on the host.
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fluentdev -d fluentdev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
