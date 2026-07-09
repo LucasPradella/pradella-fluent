@@ -1,0 +1,307 @@
+[
+  {
+    "title": "Sobrevivência no aeroporto",
+    "description": "Check-in, embarque e imigração sem sufoco.",
+    "theme": "travel",
+    "level": "basic",
+    "order": 1,
+    "lessons": [
+      {
+        "title": "Fazendo check-in",
+        "focus": "Tarefa: você chegou ao balcão da companhia aérea e precisa despachar uma mala.",
+        "xp": 50,
+        "order": 1,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Eu tenho uma mala para despachar.\"", "target": "I have one bag to check", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"Here is my passport and my ___ pass.\" (cartão de embarque)", "target": "boarding", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça o agente e escolha o que ele pediu.", "target": "Your passport, please", "options": ["Your passport, please", "Your ticket is invalid", "The flight is cancelled", "Gate twenty-two is closed"], "audioUrl": "/audio/checkin-passport.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Leia em voz alta para o agente:", "target": "I would like a window seat please", "order": 4}
+        ]
+      },
+      {
+        "title": "Passando pela imigração",
+        "focus": "Tarefa: responder às perguntas do oficial de imigração com calma.",
+        "xp": 50,
+        "order": 2,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Estou aqui a trabalho.\"", "target": "I am here on business", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I will stay ___ five days.\" (por)", "target": "for", "order": 2},
+          {"type": "listening_order", "prompt": "Ouça e monte a pergunta do oficial.", "target": "how long will you stay", "options": ["stay", "how", "will", "long", "you"], "audioUrl": "/audio/immigration-howlong.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Responda ao oficial em voz alta:", "target": "I am staying at the Hilton hotel", "order": 4}
+        ]
+      },
+      {
+        "title": "Achando o portão de embarque",
+        "focus": "Tarefa: seu voo troca de portão e você precisa de informações.",
+        "xp": 50,
+        "order": 3,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Onde fica o portão 15?\"", "target": "where is gate fifteen", "order": 1},
+          {"type": "listening_choice", "prompt": "Ouça o aviso e escolha o que aconteceu.", "target": "The gate has changed", "options": ["The gate has changed", "The flight is on time", "Boarding is complete", "The airport is closing"], "audioUrl": "/audio/gate-change.mp3", "order": 2},
+          {"type": "speaking", "prompt": "Pergunte a um funcionário em voz alta:", "target": "excuse me is this the gate for flight two zero one", "order": 3}
+        ]
+      },
+      {
+        "title": "No táxi e no hotel",
+        "focus": "Tarefa: chegar ao hotel e fazer o check-in.",
+        "xp": 50,
+        "order": 4,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Pode me levar a este endereço?\"", "target": "can you take me to this address", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I have a ___ under the name Silva.\" (reserva)", "target": "reservation", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a recepcionista e escolha a informação correta.", "target": "Breakfast is from seven to ten", "options": ["Breakfast is from seven to ten", "The pool is closed today", "Your room is not ready", "Check-out is at noon"], "audioUrl": "/audio/hotel-breakfast.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Fale com a recepcionista em voz alta:", "target": "what time is breakfast served", "order": 4}
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Inglês para o dia a dia dev",
+    "description": "Vocabulário essencial de tecnologia para começar.",
+    "theme": "tech",
+    "level": "basic",
+    "order": 1,
+    "lessons": [
+      {
+        "title": "Apresentando-se no time",
+        "focus": "Tarefa: primeiro dia no time internacional — apresente-se no stand-up.",
+        "xp": 50,
+        "order": 1,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Eu sou desenvolvedor júnior.\"", "target": "I am a junior developer", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I work ___ the backend team.\" (em/no)", "target": "on", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça o colega e escolha o que ele disse.", "target": "Welcome to the team", "options": ["Welcome to the team", "The meeting is over", "Please mute yourself", "The build is broken"], "audioUrl": "/audio/welcome-team.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Apresente-se em voz alta:", "target": "hi everyone I am the new developer on the team", "order": 4}
+        ]
+      },
+      {
+        "title": "Falando sobre seu trabalho",
+        "focus": "Tarefa: explicar em uma frase o que você está fazendo hoje.",
+        "xp": 50,
+        "order": 2,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Estou trabalhando em um bug.\"", "target": "I am working on a bug", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I will ___ my code today.\" (enviar para o repositório)", "target": "push", "order": 2},
+          {"type": "listening_order", "prompt": "Ouça e monte a frase do stand-up.", "target": "I finished the login page", "options": ["page", "I", "the", "finished", "login"], "audioUrl": "/audio/standup-login.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Diga no stand-up em voz alta:", "target": "yesterday I fixed two bugs and today I will write tests", "order": 4}
+        ]
+      },
+      {
+        "title": "Pedindo ajuda",
+        "focus": "Tarefa: você travou em um problema e precisa pedir ajuda no chat.",
+        "xp": 50,
+        "order": 3,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Você pode me ajudar com este erro?\"", "target": "can you help me with this error", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"The app crashes when I ___ the button.\" (clico)", "target": "click", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a resposta do colega e escolha o que ele sugeriu.", "target": "Try restarting the server", "options": ["Try restarting the server", "Delete the database", "Buy a new laptop", "Ignore the error"], "audioUrl": "/audio/help-restart.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Peça ajuda em voz alta:", "target": "I am stuck on this error can someone take a look", "order": 4}
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Viagem executiva",
+    "description": "Reuniões, restaurantes e imprevistos em viagem de negócios.",
+    "theme": "travel",
+    "level": "intermediate",
+    "order": 1,
+    "lessons": [
+      {
+        "title": "Remarcando um voo",
+        "focus": "Tarefa: seu voo foi cancelado e você precisa remarcar sem perder a reunião.",
+        "xp": 70,
+        "order": 1,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Meu voo foi cancelado. Preciso chegar até amanhã de manhã.\"", "target": "my flight was cancelled I need to arrive by tomorrow morning", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"Is there any earlier flight ___?\" (disponível)", "target": "available", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a atendente e escolha a opção oferecida.", "target": "There is a seat on the six a.m. flight", "options": ["There is a seat on the six a.m. flight", "All flights are full this week", "You must buy a new ticket", "The airport will close soon"], "audioUrl": "/audio/rebook-6am.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Negocie em voz alta:", "target": "could you put me on the earliest flight tomorrow", "order": 4}
+        ]
+      },
+      {
+        "title": "Jantar de negócios",
+        "focus": "Tarefa: pedir o jantar e manter conversa leve com clientes.",
+        "xp": 70,
+        "order": 2,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Eu gostaria de uma recomendação do chef.\"", "target": "I would like a recommendation from the chef", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"Could we have the ___, please?\" (a conta)", "target": "bill", "order": 2},
+          {"type": "listening_order", "prompt": "Ouça e monte a pergunta do garçom.", "target": "would you like anything to drink", "options": ["like", "would", "drink", "you", "anything", "to"], "audioUrl": "/audio/dinner-drink.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Puxe assunto em voz alta:", "target": "have you been to brazil before", "order": 4}
+        ]
+      },
+      {
+        "title": "Problemas com a reserva",
+        "focus": "Tarefa: o hotel não encontra sua reserva paga; resolva com educação e firmeza.",
+        "xp": 70,
+        "order": 3,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Eu tenho uma confirmação por e-mail com o número da reserva.\"", "target": "I have an email confirmation with the reservation number", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I ___ this room three weeks ago.\" (paguei)", "target": "paid", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a recepcionista e escolha a solução proposta.", "target": "We can upgrade you at no extra cost", "options": ["We can upgrade you at no extra cost", "There are no rooms in the city", "You must pay again", "Please come back tomorrow"], "audioUrl": "/audio/booking-upgrade.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Responda em voz alta:", "target": "that works for me thank you for solving this", "order": 4}
+        ]
+      },
+      {
+        "title": "Apresentação para o cliente",
+        "focus": "Tarefa: abrir a reunião e apresentar a agenda em inglês.",
+        "xp": 70,
+        "order": 4,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Obrigado por virem. Vamos começar com uma visão geral.\"", "target": "thank you for coming let us start with an overview", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"Feel free to ___ questions at any time.\" (fazer)", "target": "ask", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça o cliente e escolha a preocupação dele.", "target": "How long will the integration take", "options": ["How long will the integration take", "Where is the coffee machine", "Who designed your logo", "When is your flight back"], "audioUrl": "/audio/client-integration.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Abra a reunião em voz alta:", "target": "today I will walk you through our proposal and timeline", "order": 4}
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Colaboração em times globais",
+    "description": "Code review, reuniões técnicas e comunicação assíncrona.",
+    "theme": "tech",
+    "level": "intermediate",
+    "order": 1,
+    "lessons": [
+      {
+        "title": "Participando do code review",
+        "focus": "Tarefa: comentar um pull request com sugestões claras e educadas.",
+        "xp": 70,
+        "order": 1,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Sugiro extrair esta lógica para uma função separada.\"", "target": "I suggest extracting this logic into a separate function", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"This change might ___ the existing tests.\" (quebrar)", "target": "break", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça o comentário do revisor e escolha o resumo correto.", "target": "He wants smaller commits", "options": ["He wants smaller commits", "He approved everything", "He rejected the feature", "He wants more comments in Portuguese"], "audioUrl": "/audio/review-commits.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Responda ao revisor em voz alta:", "target": "good catch I will update the pull request today", "order": 4}
+        ]
+      },
+      {
+        "title": "Explicando um bug em reunião",
+        "focus": "Tarefa: descrever causa raiz e impacto de um bug para o time.",
+        "xp": 70,
+        "order": 2,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"A causa raiz foi uma condição de corrida no cache.\"", "target": "the root cause was a race condition in the cache", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"The bug only happens under heavy ___.\" (carga)", "target": "load", "order": 2},
+          {"type": "listening_order", "prompt": "Ouça e monte a pergunta do tech lead.", "target": "can we reproduce it in staging", "options": ["we", "reproduce", "can", "staging", "it", "in"], "audioUrl": "/audio/bug-staging.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Explique em voz alta:", "target": "we deployed a fix and we are monitoring the error rate", "order": 4}
+        ]
+      },
+      {
+        "title": "Escrevendo mensagens assíncronas",
+        "focus": "Tarefa: avisar o time sobre uma mudança que afeta todos, por escrito.",
+        "xp": 70,
+        "order": 3,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"A partir de segunda, a API antiga será desativada.\"", "target": "starting monday the old api will be deprecated", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"Please update your services ___ Friday.\" (até)", "target": "by", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a dúvida do colega e escolha o que ele perguntou.", "target": "Is there a migration guide", "options": ["Is there a migration guide", "Can we skip the tests", "Who broke the build", "Is the office open"], "audioUrl": "/audio/async-guide.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Grave um resumo em voz alta:", "target": "the migration guide is in the wiki let me know if you need help", "order": 4}
+        ]
+      },
+      {
+        "title": "Entrevista técnica em inglês",
+        "focus": "Tarefa: responder à clássica pergunta de experiência em entrevista.",
+        "xp": 70,
+        "order": 4,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Tenho três anos de experiência com desenvolvimento web.\"", "target": "I have three years of experience with web development", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"My biggest strength is problem ___.\" (resolução)", "target": "solving", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a entrevistadora e escolha a pergunta feita.", "target": "Tell me about a challenging project", "options": ["Tell me about a challenging project", "What is your favorite food", "Can you start tomorrow", "Do you prefer cats or dogs"], "audioUrl": "/audio/interview-project.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Responda em voz alta:", "target": "in my last project I led the migration to a new payment system", "order": 4}
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Negociações e imprevistos",
+    "description": "Situações de alto risco em viagens internacionais.",
+    "theme": "travel",
+    "level": "advanced",
+    "order": 1,
+    "lessons": [
+      {
+        "title": "Negociando um contrato",
+        "focus": "Tarefa: discutir termos e prazos com um fornecedor estrangeiro.",
+        "xp": 90,
+        "order": 1,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Podemos fechar hoje, desde que o prazo de entrega seja garantido.\"", "target": "we can close today provided that the delivery deadline is guaranteed", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"We need room for ___ on the price.\" (negociação)", "target": "negotiation", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a contraproposta e escolha o resumo correto.", "target": "They accept the deadline but want payment upfront", "options": ["They accept the deadline but want payment upfront", "They refuse any deadline", "They want to cancel the deal", "They offered a discount for delay"], "audioUrl": "/audio/negotiation-upfront.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Contra-argumente em voz alta:", "target": "we could agree to that if you include support for the first year", "order": 4}
+        ]
+      },
+      {
+        "title": "Emergência médica no exterior",
+        "focus": "Tarefa: descrever sintomas e entender orientações em um hospital.",
+        "xp": 90,
+        "order": 2,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Sinto uma dor forte no peito desde ontem à noite.\"", "target": "I have had a sharp pain in my chest since last night", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I am ___ to penicillin.\" (alérgico)", "target": "allergic", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça o médico e escolha a orientação dada.", "target": "Take this twice a day after meals", "options": ["Take this twice a day after meals", "Surgery is required immediately", "You can fly tonight", "Drink only coffee for two days"], "audioUrl": "/audio/doctor-dosage.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Confirme em voz alta:", "target": "just to confirm I should take two pills a day after eating", "order": 4}
+        ]
+      },
+      {
+        "title": "Reclamação formal",
+        "focus": "Tarefa: registrar uma reclamação por escrito com tom firme e profissional.",
+        "xp": 90,
+        "order": 3,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Escrevo para expressar minha insatisfação com o serviço prestado.\"", "target": "I am writing to express my dissatisfaction with the service provided", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"I expect a full ___ within seven days.\" (reembolso)", "target": "refund", "order": 2},
+          {"type": "listening_order", "prompt": "Ouça e monte a resposta da empresa.", "target": "we sincerely apologize for the inconvenience", "options": ["apologize", "we", "the", "sincerely", "inconvenience", "for"], "audioUrl": "/audio/complaint-apology.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Conclua a ligação em voz alta:", "target": "I appreciate your help and I expect the refund by friday", "order": 4}
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Liderança técnica em inglês",
+    "description": "Arquitetura, incidentes e comunicação executiva.",
+    "theme": "tech",
+    "level": "advanced",
+    "order": 1,
+    "lessons": [
+      {
+        "title": "Defendendo uma decisão de arquitetura",
+        "focus": "Tarefa: justificar uma escolha técnica controversa para engenheiros seniores.",
+        "xp": 90,
+        "order": 1,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Optamos por consistência eventual para reduzir a latência.\"", "target": "we opted for eventual consistency to reduce latency", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"The trade-off is acceptable given our ___ requirements.\" (escalabilidade)", "target": "scalability", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a objeção e escolha o argumento central.", "target": "He is worried about data loss during partitions", "options": ["He is worried about data loss during partitions", "He prefers a different programming language", "He wants to postpone the meeting", "He disagrees with the team name"], "audioUrl": "/audio/arch-partitions.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Responda à objeção em voz alta:", "target": "that is a fair concern and we mitigate it with idempotent writes", "order": 4}
+        ]
+      },
+      {
+        "title": "Comandando um incidente",
+        "focus": "Tarefa: coordenar a resposta a um incidente de produção em inglês.",
+        "xp": 90,
+        "order": 2,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"Precisamos reverter o deploy e comunicar os clientes afetados.\"", "target": "we need to roll back the deployment and notify the affected customers", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"Set the incident severity to ___ one.\" (nível)", "target": "level", "order": 2},
+          {"type": "listening_order", "prompt": "Ouça e monte a atualização de status.", "target": "the error rate is back to normal", "options": ["rate", "the", "normal", "error", "to", "is", "back"], "audioUrl": "/audio/incident-normal.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Dê o comando em voz alta:", "target": "let us start the postmortem tomorrow morning with the full timeline", "order": 4}
+        ]
+      },
+      {
+        "title": "Apresentando para executivos",
+        "focus": "Tarefa: traduzir métricas técnicas em impacto de negócio para a diretoria.",
+        "xp": 90,
+        "order": 3,
+        "exercises": [
+          {"type": "translate", "prompt": "Traduza: \"A migração reduziu nossos custos de infraestrutura em trinta por cento.\"", "target": "the migration reduced our infrastructure costs by thirty percent", "order": 1},
+          {"type": "fill_blank", "prompt": "Complete: \"This investment will pay ___ within two quarters.\" (compensar)", "target": "off", "order": 2},
+          {"type": "listening_choice", "prompt": "Ouça a pergunta da CFO e escolha o que ela quer saber.", "target": "What is the risk if we postpone this", "options": ["What is the risk if we postpone this", "Which framework did you use", "How many lines of code were written", "Who is your favorite engineer"], "audioUrl": "/audio/exec-risk.mp3", "order": 3},
+          {"type": "speaking", "prompt": "Responda à CFO em voz alta:", "target": "postponing doubles the maintenance cost and delays two product launches", "order": 4}
+        ]
+      }
+    ]
+  }
+]
