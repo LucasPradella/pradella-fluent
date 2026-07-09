@@ -1,6 +1,6 @@
 module github.com/pradella/fluentdev/backend
 
-go 1.26.4
+go 1.24
 
 require (
 	github.com/alexedwards/argon2id v1.0.0
