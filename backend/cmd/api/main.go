@@ -41,18 +41,19 @@ func main() {
 	runMigrations := flag.Bool("migrate", false, "apply database migrations before serving")
 	runSeed := flag.Bool("seed", false, "seed lessons and placement bank when empty")
 	migrationsDir := flag.String("migrations", "migrations", "path to migration files")
+	staticDir := flag.String("static-dir", "", "serve SPA from this directory (production mode)")
 	flag.Parse()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(logger)
 
-	if err := run(*runMigrations, *runSeed, *migrationsDir, logger); err != nil {
+	if err := run(*runMigrations, *runSeed, *migrationsDir, *staticDir, logger); err != nil {
 		logger.Error("fatal", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 }
 
-func run(runMigrations, runSeed bool, migrationsDir string, logger *slog.Logger) error {
+func run(runMigrations, runSeed bool, migrationsDir, staticDir string, logger *slog.Logger) error {
 	cfg, err := config.Load()
 	if err != nil {
 		return err
@@ -135,6 +136,7 @@ func run(runMigrations, runSeed bool, migrationsDir string, logger *slog.Logger)
 		SecureCookies: cfg.SecureCookies,
 		AppBaseURL:    cfg.AppBaseURL,
 		SessionTTL:    cfg.SessionTTL,
+		StaticDir:     staticDir,
 	})
 
 	srv := &http.Server{

@@ -1,0 +1,26 @@
+# Fly.io app configuration — https://fly.io/docs/reference/configuration/
+# Run `fly apps create fluentdev` once to claim the app name before first deploy.
+app            = 'fluentdev'
+primary_region = 'gru'   # São Paulo
+
+[build]
+  # Fly.io builds the Dockerfile at the repo root remotely.
+
+[http_service]
+  internal_port        = 8080
+  force_https          = true
+  auto_stop_machines   = 'stop'   # stop when idle (free-tier friendly)
+  auto_start_machines  = true     # wake on first request
+  min_machines_running = 0
+
+[env]
+  ADDR              = ':8080'
+  SECURE_COOKIES    = 'true'
+  TRANSCRIBE_PRIMARY = 'groq'
+  # APP_BASE_URL and OAUTH_REDIRECT_BASE are set via `fly secrets` because
+  # they contain the production domain (e.g. https://fluentdev.fly.dev).
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus     = 1
+  memory   = '256mb'

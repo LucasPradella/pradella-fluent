@@ -3,6 +3,9 @@ package httpapi
 import (
 	"log/slog"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -29,6 +32,9 @@ type Deps struct {
 	SecureCookies bool
 	AppBaseURL    string
 	SessionTTL    time.Duration
+	// StaticDir, when non-empty, enables SPA serving: static assets are served
+	// from this directory and unmatched non-/api/ paths return index.html.
+	StaticDir string
 }
 
 // NewRouter assembles the /api/v1 surface with the full middleware chain.
@@ -59,9 +65,7 @@ func NewRouter(d Deps) http.Handler {
 	r.Use(middleware.Logging(d.Logger))
 	r.Use(middleware.SecurityHeaders)
 
-	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		writeProblem(w, http.StatusNotFound, "Não encontrado", "")
-	})
+	r.NotFound(makeNotFoundHandler(d.StaticDir))
 	r.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
 		writeProblem(w, http.StatusMethodNotAllowed, "Método não permitido", "")
 	})
@@ -108,4 +112,36 @@ func NewRouter(d Deps) http.Handler {
 	})
 
 	return r
+}
+
+// makeNotFoundHandler returns a JSON 404 for /api/ paths and a SPA handler for
+// everything else when staticDir is set; pure JSON 404 otherwise.
+func makeNotFoundHandler(staticDir string) http.HandlerFunc {
+	if staticDir == "" {
+		return func(w http.ResponseWriter, r *http.Request) {
+			writeProblem(w, http.StatusNotFound, "Não encontrado", "")
+		}
+	}
+	spaH := newSPAHandler(staticDir)
+	return func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, "/api/") {
+			writeProblem(w, http.StatusNotFound, "Não encontrado", "")
+			return
+		}
+		spaH.ServeHTTP(w, r)
+	}
+}
+
+// newSPAHandler serves static files from root; paths that don't resolve to a
+// real file fall back to index.html so React Router can handle them.
+func newSPAHandler(root string) http.Handler {
+	fileServer := http.FileServer(http.Dir(root))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		target := filepath.Join(root, filepath.Clean("/"+r.URL.Path))
+		if _, err := os.Stat(target); os.IsNotExist(err) {
+			http.ServeFile(w, r, filepath.Join(root, "index.html"))
+			return
+		}
+		fileServer.ServeHTTP(w, r)
+	})
 }
